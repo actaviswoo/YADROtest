@@ -2,6 +2,7 @@
 #define MODEL_PARCER_H
 
 #include "../Data/Data.h"
+#include "../Format/Format.h"
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -19,10 +20,6 @@ class Parcer {
     void ReadStartEnd(Data& data);
     void ReadPricePerHour(Data& data);
     void ReadLogs(Data& data);
-
-    bool IsValidTime(const std::string& time);
-    bool CompareTime(const std::string& t1, const std::string& t2);
-    bool IsValidName(const std::string& name);
 };
 
 #endif  // MODEL_PARCER_H

@@ -43,8 +43,8 @@ void Parcer::ReadStartEnd(Data& data) {
         std::string start;
         std::string end;
         if (!(iss >> start >> end) 
-            || !(IsValidTime(start) && IsValidTime(end))
-            || !(CompareTime(start, end))) {
+            || !(Format::IsValidTime(start) && Format::IsValidTime(end))
+            || !(Format::CompareTime(start, end))) {
             throw std::runtime_error("Error line: " + iss.str());
         }
         data.start = start;
@@ -79,10 +79,10 @@ void Parcer::ReadLogs(Data& data) {
         unsigned int table = 0;
         if (!(iss >> time >> id >> body) 
             || (id > 4) 
-            || !(IsValidTime(time))
-            || (!data.logs.empty() && !CompareTime(data.logs.back().time, time))
+            || !(Format::IsValidTime(time))
+            || (!data.logs.empty() && !Format::CompareTime(data.logs.back().time, time))
             || (id != 2 && (iss >> table))
-            || !(IsValidName(body))) {
+            || !(Format::IsValidName(body))) {
             throw std::runtime_error("Error line: " + iss.str());
         }
         if (id == 2) {
@@ -93,37 +93,3 @@ void Parcer::ReadLogs(Data& data) {
         data.logs.push_back({time, id, body, table});
     }
 }
-
-bool Parcer::IsValidTime(const std::string& time) {
-    if (time.empty()) 
-        return false;
-    std::regex timePattern(R"(^([01]\d|2[0-3]):([0-5]\d)$)");
-    return std::regex_match(time, timePattern);
-}
-
-bool Parcer::CompareTime(const std::string& time1, const std::string& time2) {
-    if (time1.empty() || time2.empty())
-        return false;
-    int hour1 = stoi(time1.substr(0, 2));
-    int minute1 = stoi(time1.substr(3, 2));
-    int hour2 = stoi(time2.substr(0, 2));
-    int minute2 = stoi(time2.substr(3, 2));
-    if (hour1 < hour2) {
-        return true;
-    } else if (hour1 > hour2) {
-        return false;
-    } else {
-        return minute1 <= minute2;
-    }
-}
-
-bool Parcer::IsValidName(const std::string& name) {
-    if (name.empty())
-        return false;
-    for (char ch : name) {
-        if (!isalnum(ch) && ch != '_' && ch != '-')
-            return false;
-    }
-    return true;
-}
-

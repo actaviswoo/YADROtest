@@ -19,4 +19,6 @@ struct Data {
     std::vector<Log> logs;
 };
 
+
+
 #endif  // MODEL_DATA_H

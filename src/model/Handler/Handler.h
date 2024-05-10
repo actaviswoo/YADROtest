@@ -2,19 +2,37 @@
 #define MODEL_HANDLER_H
 
 #include "../Data/Data.h"
+#include "../Format/Format.h"
 
-// Имена клиентов представляют собой комбинацию символов из алфавита a..z, 0..9, _, -
-// Время задается в 24-часовом формате с двоеточием в качестве разделителя XX:XX, 
-//       незначащие нули обязательны при вводе и выводе (например 15:03 или 08:09).
-// Каждый стол имеет свой номер от 1 до N, где N – общее число столов, указанное в конфигурации.
-// Все события идут последовательно во времени. (время события N+1) ≥ (время события N).
-
+#include <set>
+#include <vector>
 
 class Handler {
     public:
     Handler(Data& data);
+    std::string EventHandle();
     private:
+    void Event(Log& id);
     Data& data_;
+    std::string output_;
+    std::vector<std::string> waiting_room_;
+    std::vector<std::string> tables_;
+
+    void EventInArrived(Log& log);
+    void EventInSatDown(Log& log);
+    void EventInWaiting(Log& log);
+    void EventInLeft(Log& log);
+    void EventLeftAll();
+    enum Events {
+        kInArrived = 1,
+        kInSatDown = 2,
+        kInWaiting = 3,
+        kInLeft = 4,
+        kOutLeft = 11,
+        kOutSatDown = 12,
+        kOutError = 13
+    };
+
 };
 
 #endif  // MODEL_HANDLER_H

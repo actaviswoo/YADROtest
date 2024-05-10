@@ -1,10 +1,10 @@
 #include "Handler.h"
-#include "../Reader/Reader.h"
+#include "../Parcer/Parcer.h"
 int main() {
-    Reader Reader("/home/argoniaz/YADROtest/src/resources/text_file.txt");
+    Parcer Parcer("/home/argoniaz/YADROtest/src/resources/text_file.txt");
     Data data;
     try {
-    data = Reader.GetData();
+    data = Parcer.GetData();
     std::cout << data.count_tables << std::endl;
     std::cout << data.start << " " << data.end << std::endl;
     std::cout << data.price_per_hour << std::endl;
@@ -15,5 +15,5 @@ int main() {
         std::cerr << "Exception caught: " << e.what() << std::endl;
     }
     Handler Handler(data);
-    
+    Handler.EventHandle();
 }
