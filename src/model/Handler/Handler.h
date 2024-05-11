@@ -17,6 +17,7 @@ class Handler {
     std::string output_;
     std::vector<std::string> waiting_room_;
     std::vector<std::string> tables_;
+    std::vector<std::pair<std::string, std::string>> hours_;
 
     void EventInArrived(Log& log);
     void EventInSatDown(Log& log);
