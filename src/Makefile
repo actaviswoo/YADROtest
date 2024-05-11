@@ -4,7 +4,7 @@ CC 				= g++
 # Compiler flags
 CFLAGS 			= -Wextra -Wall -Werror
 CPPFLAGS 		= -std=c++17
-TESTFLAGS		= -lgtest -lgtest_main -lpthread
+TESTFLAGS		= -lgtest -lgtest_main -lpthread -fsanitize=address
 # TSANFLAGS		= -fsanitize=thread 
 
 # Directories
@@ -14,9 +14,11 @@ TESTDIR 		= tests
 
 # Source files
 SRC_MAIN		= main.cc 
-SRC_MODEL 		= $(MODELDIR)/Model.cc \
-           		  $(MODELDIR)/Parcer/Parcer.cc
-SRC_TEST 		= $(TESTDIR)/main_test.cc
+SRC_MODEL 		= $(MODELDIR)/Parcer/Parcer.cc \
+				  $(MODELDIR)/Handler/Handler.cc \
+				  $(MODELDIR)/Format/Format.cc
+SRC_TEST 		= $(TESTDIR)/main_test.cc \
+				  $(TESTDIR)/parcer_test.cc 
 
 # Main executable
 MAIN 			= $(BUILDDIR)/main
@@ -34,7 +36,7 @@ main:
 
 test:
 	mkdir -p $(BUILDDIR)
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o $(test) $(SRC_TEST) $(SRC_MODEL)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o $(TEST) $(SRC_TEST) $(SRC_MODEL) $(TESTFLAGS)
 	./$(TEST)
 
 all: clean main
