@@ -1,6 +1,5 @@
 #include "Handler.h"
 
-#include <iostream>
 Handler::Handler(Data& data) : data_(data) {
   tables_.resize(data_.count_tables, "");
   hours_.resize(data_.count_tables, std::make_pair("", "00:00"));
@@ -98,6 +97,9 @@ void Handler::EventInLeft(Log& log) {
     output_ += log.time + " " + std::to_string(Events::kOutSatDown) + " " +
                waiting_room_.back() + " " + std::to_string(i + 1) + "\n";
     waiting_room_.pop_back();
+    if (Format::GetMinute(hours_[i].first) != Format::GetMinute(log.time)) {
+      hours_[i].second = Format::SumTime(hours_[i].second, "01:00");
+    }
     hours_[i].first = log.time;
   } else {
     hours_[i].first = "";
@@ -117,7 +119,6 @@ void Handler::EventLeftAll() {
         hours_[i].second, Format::DiffTime(data_.end, hours_[i].first));
   }
   for (auto s : all) {
-    output_ +=
-        data_.end + " " + std::to_string(Events::kOutLeft) + " " + s + "\n";
+    output_ += data_.end + " " + std::to_string(Events::kOutLeft) + " " + s + "\n";
   }
 }

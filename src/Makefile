@@ -4,7 +4,8 @@ CC 				= g++
 # Compiler flags
 CFLAGS 			= -Wextra -Wall -Werror
 CPPFLAGS 		= -std=c++17
-TESTFLAGS		= -lgtest -lgtest_main -lpthread -fsanitize=address
+TESTFLAGS		= -lgtest -lgtest_main 
+# -lpthread -fsanitize=address
 # TSANFLAGS		= -fsanitize=thread 
 
 # Directories
@@ -18,7 +19,8 @@ SRC_MODEL 		= $(MODELDIR)/Parcer/Parcer.cc \
 				  $(MODELDIR)/Handler/Handler.cc \
 				  $(MODELDIR)/Format/Format.cc
 SRC_TEST 		= $(TESTDIR)/main_test.cc \
-				  $(TESTDIR)/parcer_test.cc 
+				  $(TESTDIR)/parcer_test.cc \
+				  $(TESTDIR)/handler_test.cc \
 
 # Main executable
 MAIN 			= $(BUILDDIR)/main
@@ -29,10 +31,9 @@ TEST 			= $(BUILDDIR)/test
 # Targets
 .PHONY: all clean run
 
-main:
+main: 
 	mkdir -p $(BUILDDIR)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o $(MAIN) $(SRC_MAIN) $(SRC_MODEL)
-	./$(MAIN)
 
 test:
 	mkdir -p $(BUILDDIR)

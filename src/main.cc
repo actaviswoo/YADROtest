@@ -2,6 +2,7 @@
 #include "model/Parcer/Parcer.h"
 #include <iostream>
 int main(int argc, char* argv[]) {
+    if (argc < 1) return 0;
     std::string filename = argv[1];
     try {
         Parcer parcer(filename);

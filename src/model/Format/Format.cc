@@ -22,7 +22,7 @@ std::string Format::SumTime(const std::string& time1,
     hour++;
     minute -= 60;
   }
-  char buffer[6];
+  char buffer[64];
   snprintf(buffer, sizeof(buffer), "%02d:%02d", hour, minute);
   return buffer;
 }
@@ -42,7 +42,7 @@ std::string Format::DiffTime(const std::string& time1,
     diffHour--;
     diffMinute += 60;
   }
-  char buffer[6];
+  char buffer[64];
   snprintf(buffer, sizeof(buffer), "%02d:%02d", diffHour, diffMinute);
   return buffer;
 }

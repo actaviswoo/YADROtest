@@ -3,6 +3,7 @@
 
 #include <set>
 #include <vector>
+#include <iostream>
 
 #include "../Data/Data.h"
 #include "../Format/Format.h"
