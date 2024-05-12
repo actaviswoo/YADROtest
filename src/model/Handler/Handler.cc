@@ -3,6 +3,7 @@
 Handler::Handler(Data& data) : data_(data) {
   tables_.resize(data_.count_tables, "");
   hours_.resize(data_.count_tables, std::make_pair("", "00:00"));
+  profit_.resize(data_.count_tables, 0);
 }
 
 std::string Handler::EventHandle() {
@@ -18,8 +19,7 @@ std::string Handler::EventHandle() {
   output_ += data_.end + "\n";
   for (std::size_t i = 0; i < hours_.size(); i++) {
     output_ += std::to_string(i + 1) + " " +
-               std::to_string(data_.price_per_hour *
-                              Format::RoundTime(hours_[i].second)) +
+               std::to_string(profit_[i]) +
                " " + hours_[i].second + "\n";
   }
   return output_;
@@ -70,8 +70,16 @@ void Handler::EventInWaiting(Log& log) {
     output_ += log.time + " " + std::to_string(Events::kOutError) + " ICanWaitNoLonger!\n";
     return;
   }
-  if (waiting_room_.size() > tables_.size()) {
-    output_ += log.time + " " + std::to_string(Events::kOutLeft) + "\n";
+  std::size_t i = 0;
+  while (i < waiting_room_.size()) {
+    if (waiting_room_[i] == log.body) {
+      break;
+    }
+    i++;
+  }
+  if (!(i > waiting_room_.size() - tables_.size() - 1)) {
+    waiting_room_.erase(waiting_room_.begin() + i);
+    output_ += log.time + " " + std::to_string(Events::kOutLeft) + " " + log.body + "\n";
     return;
   }
 }
@@ -82,6 +90,11 @@ void Handler::EventInLeft(Log& log) {
     output_ += log.time + " " + std::to_string(Events::kOutError) + " ClientUnknown\n";
     return;
   }
+  if (std::find(waiting_room_.begin(), waiting_room_.end(), log.body) != waiting_room_.end()) {
+    waiting_room_.erase(std::find(waiting_room_.begin(), waiting_room_.end(), log.body));
+    output_ += log.time + " " + std::to_string(Events::kOutLeft) + " " + log.body + "\n";
+    return;
+  }
   std::size_t i = 0;
   while (i < tables_.size()) {
     if (tables_[i] == log.body) {
@@ -90,16 +103,13 @@ void Handler::EventInLeft(Log& log) {
     }
     i++;
   }
-  hours_[i].second = Format::SumTime(
-      hours_[i].second, Format::DiffTime(log.time, hours_[i].first));
+  hours_[i].second = Format::SumTime(hours_[i].second, Format::DiffTime(log.time, hours_[i].first));
+  profit_[i] += data_.price_per_hour * Format::RoundTime(Format::DiffTime(log.time, hours_[i].first));
   if (!waiting_room_.empty()) {
     tables_[i] = waiting_room_.back();
     output_ += log.time + " " + std::to_string(Events::kOutSatDown) + " " +
                waiting_room_.back() + " " + std::to_string(i + 1) + "\n";
     waiting_room_.pop_back();
-    if (Format::GetMinute(hours_[i].first) != Format::GetMinute(log.time)) {
-      hours_[i].second = Format::SumTime(hours_[i].second, "01:00");
-    }
     hours_[i].first = log.time;
   } else {
     hours_[i].first = "";
@@ -117,6 +127,7 @@ void Handler::EventLeftAll() {
     all.insert(tables_[i]);
     hours_[i].second = Format::SumTime(
         hours_[i].second, Format::DiffTime(data_.end, hours_[i].first));
+    profit_[i] += data_.price_per_hour * Format::RoundTime(hours_[i].second);
   }
   for (auto s : all) {
     output_ += data_.end + " " + std::to_string(Events::kOutLeft) + " " + s + "\n";

@@ -1,0 +1,20 @@
+09:00
+09:00 1 client1 
+09:01 1 client2 
+09:02 1 client3 
+09:03 1 client4 
+09:04 3 client1 
+09:04 13 ICanWaitNoLonger!
+09:05 3 client2 
+09:05 13 ICanWaitNoLonger!
+09:06 3 client3 
+09:06 13 ICanWaitNoLonger!
+09:07 3 client4 
+09:07 13 ICanWaitNoLonger!
+10:00 11 client1
+10:00 11 client2
+10:00 11 client3
+10:00 11 client4
+10:00
+1 0 00:00
+2 0 00:00

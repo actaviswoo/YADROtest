@@ -1,0 +1,28 @@
+09:00
+09:00 1 client1 
+09:01 2 client1 1
+09:02 4 client1 
+09:03 1 client1 
+09:04 2 client1 1
+09:05 4 client1 
+09:06 1 client1 
+09:07 1 client1 
+09:07 13 YouShallNotPass
+09:08 1 client1 
+09:08 13 YouShallNotPass
+09:09 3 client1 
+09:09 13 ICanWaitNoLonger!
+09:10 1 client1 
+09:10 13 YouShallNotPass
+09:11 4 client1 
+09:11 11 client1
+09:12 4 client1 
+09:12 13 ClientUnknown
+09:13 1 client1 
+09:14 2 client1 1
+09:15 1 client2 
+10:00 11 client1
+10:00 11 client2
+10:00
+1 30 00:48
+2 0 00:00
