@@ -77,10 +77,13 @@ void Handler::EventInWaiting(Log& log) {
     }
     i++;
   }
-  if (!(i > waiting_room_.size() - tables_.size() - 1)) {
-    waiting_room_.erase(waiting_room_.begin() + i);
-    output_ += log.time + " " + std::to_string(Events::kOutLeft) + " " + log.body + "\n";
-    return;
+  if (i < waiting_room_.size() - tables_.size() && waiting_room_.size() > tables_.size()) {
+    auto it = std::find(waiting_room_.begin(), waiting_room_.end(), log.body);
+    if (it != waiting_room_.begin() + waiting_room_.size()) {
+      waiting_room_.erase(it);
+      output_ += log.time + " " + std::to_string(Events::kOutLeft) + " " + log.body + "\n";
+      return;
+    }
   }
 }
 

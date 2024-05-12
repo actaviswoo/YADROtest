@@ -4,9 +4,7 @@ CC 				= g++
 # Compiler flags
 CFLAGS 			= -Wextra -Wall -Werror
 CPPFLAGS 		= -std=c++17
-TESTFLAGS		= -lgtest -lgtest_main 
-# -lpthread -fsanitize=address
-# TSANFLAGS		= -fsanitize=thread 
+TESTFLAGS		= -lgtest -lgtest_main -fsanitize=address
 
 # Directories
 MODELDIR 		= model
@@ -21,9 +19,10 @@ SRC_MODEL 		= $(MODELDIR)/Parcer/Parcer.cc \
 SRC_TEST 		= $(TESTDIR)/main_test.cc \
 				  $(TESTDIR)/parcer_test.cc \
 				  $(TESTDIR)/handler_test.cc \
+				  $(TESTDIR)/format_test.cc 
 
 # Main executable
-MAIN 			= $(BUILDDIR)/main
+MAIN 			= $(BUILDDIR)/task.exe
 
 # Test executable
 TEST 			= $(BUILDDIR)/test
